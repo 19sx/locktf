@@ -1,0 +1,199 @@
+        /* --- Global Page Styles --- */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Dark theme */
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Make footer stick to bottom */
+        }
+
+        /*Header & Footer*/
+        header, footer {
+            background-color: #000;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            color: #fff;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+        }
+
+        /*Links*/
+        a {
+            color: #b3b3b3;
+            text-decoration: none;
+        }
+        a:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        /*Main Layout*/
+        main {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .main-layout-container {
+            display: flex;          /* Two-column layout */
+            flex-direction: row;
+            gap: 50px;              /* Space between columns */
+            width: 100%;
+            justify-content: center;
+            align-items: flex-start; /* Align both to top */
+        }
+
+        /*To-Do List*/
+        .todo-container {
+            width: 300px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+        .todo-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+        .todo-title {
+            margin: 0;
+            font-size: 1.5em;
+            color: #fff;
+        }
+        .todo-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto; /* Scroll if too many tasks */
+        }
+        .todo-list li {
+            background: #333;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        .todo-list li:hover {
+            background: #555;
+        }
+
+        /* Input & Add Button */
+        .todo-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #333;
+        }
+        .todo-input {
+            background: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 10px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 1em;
+        }
+        .todo-add-btn, .timer-controls button {
+            background: #b3b3b3;
+            color: black;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .todo-add-btn:hover, .timer-controls button:hover {
+            background: #fff;
+        }
+        .delete-btn {
+            background: transparent;
+            color: #bdbbbb;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        /* Pomodoro Timer */
+        .main-content-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #pomodoro-timer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .timer-display {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        /* Circular progress bar */
+        .progress-ring {
+            transform: rotate(-90deg);
+            margin-top: 10px;
+        }
+        .progress-ring-background {
+            stroke: rgba(255, 255, 255, 0.15);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s linear;
+            stroke: #b3b3b3;
+            stroke-dasharray: calc(2 * 3.14159 * 40);
+            stroke-dashoffset: calc(2 * 3.14159 * 40);
+            stroke-linecap: round;
+        }
+
+        /* Extra Info */
+        #clock, #progress {
+            color: #b3b3b3;
+        }
+
+        /* --- Random Quotes Block --- */
+        .quotes-container {
+            margin-top: 20px;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            color: #bdbbbb;
+        }
+        .random-quote {
+            font-style: italic;
+            font-size: 1.1em;
+        }
+        .quote-author {
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
