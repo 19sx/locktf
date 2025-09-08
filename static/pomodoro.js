@@ -47,14 +47,17 @@ aa
 }
 
 function tick() {
+    // If the timer is paused, do nothing
     if (isPaused) return;
+
     timerSeconds--;
     updateTimerDisplay();
 
+    // The logic to handle the transition should run when the timer hits zero or goes below.
     if (timerSeconds <= 0) {
+        // Stop the current timer from running.
         clearInterval(timerId);
-        // Play a sound or show a notification
-        alert(isPomodoro ? "Pomodoro finished!" : "Break finished!");
+        timerId = null;
 
         if (isPomodoro) {
             pomodoroCount++;
@@ -74,7 +77,6 @@ function tick() {
         updateTimerDisplay(); // Update display immediately for the new phase
         isPaused = true;
         startBtn.textContent = 'Start';
-        timerId = null; // Clear timerId so it can be re-initialized on next start
     }
 }
 startBtn.addEventListener('click', () => {
