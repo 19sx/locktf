@@ -41,7 +41,6 @@ function updateTimerDisplay() {
         totalPhaseDuration = SHORT_BREAK;
     }
 
-aa
     const progress = 1 - (timerSeconds / totalPhaseDuration);
     updateProgressBar(progress);
 }
@@ -75,8 +74,7 @@ function tick() {
 
         isPomodoro = !isPomodoro;
         updateTimerDisplay(); // Update display immediately for the new phase
-        isPaused = true;
-        startBtn.textContent = 'Start';
+        timerId = setInterval(tick, 1000); // Automatically start the next session
     }
 }
 startBtn.addEventListener('click', () => {
@@ -107,6 +105,3 @@ resetBtn.addEventListener('click', () => {
 
 // Initial display update (this will also set the initial progress bar state)
 updateTimerDisplay();
-
-
-// Main idea by me fully Implemented with the help of chatgpt due to some major issues
