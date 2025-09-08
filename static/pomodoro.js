@@ -62,13 +62,16 @@ function tick() {
             pomodoroCount++;
             if (pomodoroCount % 4 === 0) {
                 timerSeconds = LONG_BREAK;
+                document.getElementById('xyz').play();
                 alert("Long break time!");
             } else {
                 timerSeconds = SHORT_BREAK;
+                document.getElementById('xyz').play();
                 alert("Short break time!");
             }
         } else {
             timerSeconds = POMODORO_DURATION;
+            document.getElementById('xyz').play();
             alert("New Pomodoro session!");
         }
 
@@ -87,6 +90,7 @@ startBtn.addEventListener('click', () => {
 
 pauseBtn.addEventListener('click', () => {
     isPaused = true;
+    document.getElementById('xyz').play();
     startBtn.textContent = 'Start';
 });
 
