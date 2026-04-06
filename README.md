@@ -1,58 +1,56 @@
-# \# Locktf: The Minimalist Approach to Productivity
+# Locktf
 
-# 
+Locktf is a minimalist, single-page work assistant. Its core philosophy is simple: **less is more**. 
 
-# Locktf is a single-page work assistant operating on the motto of "less is more."
+Designed to cut out distractions, Locktf uses a clean, monochrome aesthetic inspired by modern, distraction-free design to help you focus entirely on your work. 
 
-# The application utilizes an Apple-inspired minimalist approach and monochrome grayscale tonality to eliminate distractions and get you focused on what truly matters most: work. 
+Under the hood, it features a robust Python and Flask backend that provides private, secure accounts, ensuring your tasks, timers, and productivity streaks follow you wherever you go.
 
-# 
+## Features
 
-# Under the hood, it features a robust Python/Flask backend providing private, secure accounts for every user, ensuring your tasks and productivity streaks follow you everywhere.
+- **Private User Accounts:** Simple, secure registration and login.
+- **To-Do List:** Persistent task management synced directly to your profile.
+- **Pomodoro Timer:** Distraction-free interval timer utilizing native, soothing Web Audio API alerts.
+- **Day Progress:** Visual indicators (current time and day percentage) to keep you anchored in the present.
+- **Productivity Analytics:** Silent tracking of your completed work sessions.
+- **Random Quotes:** A touch of focus-oriented motivation.
 
-# 
+## Tech Stack
 
-# \## Tech Stack
+- **Backend:** Python, Flask, SQLite3
+- **Frontend:** HTML5, pure CSS3, Vanilla JavaScript (Zero external dependencies)
+- **Security:** Session-based authentication with secure password hashing.
 
-# \* \*\*Backend:\*\* Python, Flask, SQLite3, Gunicorn
+## Running Locally
 
-# \* \*\*Frontend:\*\* HTML5, pure CSS3, Vanilla JavaScript (Zero external dependencies)
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/19sx/locktf.git
+   cd locktf
+   ```
 
-# \* \*\*Security:\*\* Session-based authentication, Werkzeug password hashing
+2. **Set up a virtual environment:**
+   ```bash
+   python -m venv venv
+   ```
 
-# 
+3. **Activate the environment & install dependencies:**
+   - On Windows: `venv\Scripts\activate`
+   - On macOS/Linux: `source venv/bin/activate`
+   
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-# \## Features
+4. **Set a local secret key:**
+   - On Windows: `set SECRET_KEY="your-dev-key"`
+   - On macOS/Linux: `export SECRET_KEY="your-dev-key"`
 
-# \- \*\*Private User Accounts:\*\* Secure registration and login flow.
+5. **Run the app:**
+   ```bash
+   flask run
+   ```
 
-# \- \*\*To-Do List:\*\* Persistent task management synced securely to your database profile.
+## Authors
 
-# \- \*\*Pomodoro Timer:\*\* Distraction-free interval timer utilizing native Web Audio API alerts.
-
-# \- \*\*Current Time and Day Progress:\*\* Visual indicators to keep you anchored in the present.
-
-# \- \*\*Productivity Analytics:\*\* Silent tracking of completed work sessions.
-
-# \- \*\*Random Quote:\*\* Focus-oriented motivation.
-
-# 
-
-# \## Local Development Setup
-
-# 1\. Clone the repository: `git clone https://github.com/YourUsername/locktf.git`
-
-# 2\. Create a virtual environment: `python -m venv venv`
-
-# 3\. Activate the environment and install dependencies: `pip install -r requirements.txt`
-
-# 4\. Set a local secret key: `export SECRET\_KEY="dev-key"` (Mac/Linux) or `set SECRET\_KEY="dev-key"` (Windows)
-
-# 5\. Run the app: `flask run`
-
-# 
-
-# \## Authors
-
-# \- \[@19sx](https://www.github.com/19sx)
-
+- [@19sx](https://www.github.com/19sx)
