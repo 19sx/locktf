@@ -1,0 +1,14 @@
+# Environments
+venv/
+env/
+.env
+__pycache__/
+*.pyc
+
+# IDEs
+.idea/
+.vscode/
+
+# Database
+*.db
+locktf.db
