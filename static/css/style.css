@@ -467,3 +467,46 @@ main {
     color: var(--text-secondary);
     font-weight: 500;
 }
+
+/* --- Mobile Optimization --- */
+@media (max-width: 768px) {
+    main {
+        padding: 20px 16px;
+    }
+
+    .main-layout-container {
+        flex-direction: column;
+        gap: 24px;
+        align-items: stretch;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .todo-container {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 20px 16px;
+    }
+
+    #pomodoro-timer {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 24px 16px;
+    }
+
+    .auth-box {
+        padding: 24px 16px;
+        margin: 0 16px;
+    }
+
+    /* Touch Targets & Minimum Font Size to prevent iOS zoom */
+    input, button, .auth-btn, .todo-add-btn, .timer-controls button, .auth-input, .todo-input, .todo-list li {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .delete-btn, .todo-add-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
