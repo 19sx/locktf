@@ -1,4 +1,121 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // --- Authentication Logic ---
+    const authContainer = document.getElementById('auth-container');
+    const appContainer = document.getElementById('app-container');
+    const authForm = document.getElementById('auth-form');
+    const authToggleBtn = document.getElementById('auth-toggle-btn');
+    const authSubtitle = document.getElementById('auth-subtitle');
+    const authUsername = document.getElementById('auth-username');
+    const authPassword = document.getElementById('auth-password');
+    const authSubmitBtn = document.getElementById('auth-submit-btn');
+
+    let isLoginMode = true;
+
+    // Show auth screen if not logged in
+    async function checkAuth() {
+        try {
+            const res = await fetch('/api/auth/me');
+            if (res.ok) {
+                showApp();
+            } else {
+                showAuth();
+            }
+        } catch (e) {
+            showAuth();
+        }
+    }
+
+    function showAuth(message = "Sign in to focus", isError = false) {
+        if (appContainer) appContainer.style.display = 'none';
+        if (authContainer) authContainer.style.display = 'flex';
+        if (authSubtitle) {
+            authSubtitle.textContent = message;
+            authSubtitle.style.color = isError ? 'red' : 'var(--text-secondary)';
+        }
+    }
+
+    function showApp() {
+        if (authContainer) authContainer.style.display = 'none';
+        if (appContainer) appContainer.style.display = 'flex';
+        loadTasks();
+        renderHeatmap();
+    }
+
+    if (authToggleBtn) {
+        authToggleBtn.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            authSubmitBtn.textContent = isLoginMode ? 'Login' : 'Register';
+            authToggleBtn.textContent = isLoginMode ? 'Need an account? Register' : 'Already have an account? Login';
+            showAuth(isLoginMode ? "Sign in to focus" : "Create an account", false);
+        });
+    }
+
+    if (authForm) {
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = authUsername.value.trim();
+            const password = authPassword.value.trim();
+
+            if (!username || !password) return;
+
+            const endpoint = isLoginMode ? '/api/auth/login' : '/api/auth/register';
+            
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    authPassword.value = ''; // clear password
+                    if (!isLoginMode) {
+                        // Registration successful, log them in automatically or just switch mode
+                        showAuth("Registration successful. Logging in...", false);
+                        checkAuth();
+                    } else {
+                        showApp();
+                    }
+                } else {
+                    showAuth(data.error || 'Authentication failed', true);
+                }
+            } catch (err) {
+                showAuth('Network error', true);
+            }
+        });
+    }
+
+    // Add logout functionality dynamically since the button might not exist in HTML yet
+    // Assuming we'll add it to the footer or header
+    const footer = document.querySelector('footer');
+    if (footer) {
+        const logoutBtn = document.createElement('button');
+        logoutBtn.textContent = 'Logout';
+        logoutBtn.style.cssText = 'background: none; border: none; color: var(--text-secondary); cursor: pointer; text-decoration: underline; margin-left: 15px; font-family: inherit; font-size: inherit;';
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await fetch('/api/auth/logout', { method: 'POST' });
+                showAuth("Signed out successfully", false);
+            } catch(e) {
+                console.error("Logout failed", e);
+            }
+        });
+        footer.appendChild(logoutBtn);
+    }
+
+    // API Wrapper to handle 401s
+    async function apiFetch(url, options = {}) {
+        const response = await fetch(url, options);
+        if (response.status === 401) {
+            showAuth("Session expired. Please log in again.", true);
+            throw new Error("Unauthorized");
+        }
+        return response;
+    }
+
+
     // --- Current Time & Day Progress ---
     const clockElement = document.getElementById("clock");
     const progressElement = document.getElementById("progress");
@@ -144,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Analytics: Log Session ---
     async function logSession() {
         try {
-            await fetch('/api/stats', { method: 'POST' });
+            await apiFetch('/api/stats', { method: 'POST' });
             renderHeatmap(); // Refresh heatmap
         } catch (error) {
             console.error('Failed to log session', error);
@@ -157,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!heatmapContainer) return;
 
         try {
-            const response = await fetch('/api/stats');
+            const response = await apiFetch('/api/stats');
             const data = await response.json();
             
             heatmapContainer.innerHTML = '';
@@ -231,38 +348,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize display & Heatmap
+    // Initialize display
     updateTimerDisplay(remainingSeconds);
-    renderHeatmap();
+
 
     // --- To-Do List ---
     const taskInput = document.getElementById('new-task-input');
     const addTaskBtn = document.getElementById('add-task-btn');
     const todoList = document.getElementById('todo-list');
 
-    // Load tasks from API, fallback to localStorage
+    // Load tasks from API
     async function loadTasks() {
         try {
-            const response = await fetch('/api/todos');
-            if (!response.ok) throw new Error('API unreachable');
+            const response = await apiFetch('/api/todos');
             const tasks = await response.json();
             todoList.innerHTML = '';
             tasks.forEach(task => {
                 addTaskElement(task.task, task.id, task.status);
             });
-            // Update local storage cache
-            localStorage.setItem('tasks', JSON.stringify(tasks));
         } catch (error) {
-            console.error('Failed to load from API, falling back to localStorage', error);
-            const localTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            console.error('Failed to load tasks', error);
             todoList.innerHTML = '';
-            localTasks.forEach(task => {
-                addTaskElement(task.task || task, task.id, task.status || 0); // Handle old format
-            });
         }
     }
 
-    // Save task to API, fallback to localStorage
+    // Save task to API
     async function addTaskElement(taskText, taskId = null, status = 0) {
         if (!todoList || taskText.trim() === '') return;
 
@@ -273,7 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
         deleteBtn.textContent = 'x';
         deleteBtn.classList.add('delete-btn');
 
-        // Initial render logic (from API or local cache)
+        // Initial render logic
         if (taskId) {
             li.dataset.id = taskId;
         }
@@ -294,49 +404,38 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = li.dataset.id;
             if (id) {
                 try {
-                    await fetch(`/api/todos/${id}`, {
+                    await apiFetch(`/api/todos/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ status: newStatus })
                     });
                 } catch (error) {
                     console.error('API Update failed', error);
+                    // Revert UI on failure
+                    li.dataset.status = newStatus === 1 ? 0 : 1;
+                    li.classList.toggle('completed');
                 }
             }
-            syncFallbackCache();
         });
 
         deleteBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            li.remove();
             
             const id = li.dataset.id;
             if (id) {
                 try {
-                    await fetch(`/api/todos/${id}`, { method: 'DELETE' });
+                    await apiFetch(`/api/todos/${id}`, { method: 'DELETE' });
+                    li.remove();
                 } catch (error) {
                     console.error('API Delete failed', error);
                 }
+            } else {
+                 li.remove(); // Just remove from UI if no ID
             }
-            
-            // Always sync fallback cache
-            syncFallbackCache();
         });
 
         li.appendChild(deleteBtn);
         todoList.appendChild(li);
-    }
-
-    function syncFallbackCache() {
-        const tasks = [];
-        todoList.querySelectorAll('li').forEach(item => {
-            tasks.push({
-                id: item.dataset.id,
-                task: item.firstChild.textContent,
-                status: parseInt(item.dataset.status || 0)
-            });
-        });
-        localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
     if (addTaskBtn) {
@@ -348,21 +447,17 @@ document.addEventListener('DOMContentLoaded', () => {
             let newId = null;
 
             try {
-                const response = await fetch('/api/todos', {
+                const response = await apiFetch('/api/todos', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ task: taskText })
                 });
-                if (response.ok) {
-                    const data = await response.json();
-                    newId = data.id;
-                }
+                const data = await response.json();
+                newId = data.id;
+                addTaskElement(taskText, newId);
             } catch (error) {
-                console.error('Failed to save to API, saving locally', error);
+                console.error('Failed to save to API', error);
             }
-
-            addTaskElement(taskText, newId);
-            syncFallbackCache();
         });
     }
 
@@ -373,8 +468,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
-    loadTasks();
 
     // --- Random Quote Generator ---
     const quoteDisplay = document.getElementById('random-quote');
@@ -396,4 +489,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchAndDisplayQuote();
+
+    // Start the app by checking auth
+    checkAuth();
 });

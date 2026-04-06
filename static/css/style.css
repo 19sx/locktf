@@ -6,9 +6,9 @@
     --text-primary: #ffffff;
     --text-secondary: #8e8e93;
     --border-color: #38383a;
-    --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.6);
-    --border-radius: 16px;
-    --border-radius-sm: 10px;
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --border-radius: 12px;
+    --border-radius-sm: 8px;
     --transition-speed: 0.2s;
 }
 
@@ -20,13 +20,13 @@
         --text-primary: #1d1d1f;
         --text-secondary: #86868b;
         --border-color: #e5e5ea;
-        --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+        --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 }
 
 body {
     /* Apple system font stack */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     margin: 0;
@@ -39,7 +39,104 @@ body {
     transition: background-color var(--transition-speed) ease-in-out, color var(--transition-speed) ease-in-out;
 }
 
-/*Header & Footer*/
+/* Auth Container */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 100vh;
+}
+
+.auth-box {
+    background: var(--surface-color);
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+}
+
+.auth-title {
+    margin: 0;
+    font-size: 2em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+.auth-subtitle {
+    margin: 8px 0 24px 0;
+    color: var(--text-secondary);
+    font-size: 0.95em;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-input {
+    background: var(--bg-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 14px 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 1em;
+    font-family: inherit;
+    transition: all var(--transition-speed) ease;
+    outline: none;
+}
+
+.auth-input:focus {
+    border-color: var(--text-secondary);
+    box-shadow: 0 0 0 2px rgba(142, 142, 147, 0.2);
+}
+
+.auth-btn {
+    background: var(--text-primary);
+    color: var(--bg-color);
+    border: none;
+    padding: 14px 16px;
+    border-radius: var(--border-radius-sm);
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    font-family: inherit;
+    margin-top: 8px;
+}
+
+.auth-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.auth-btn:active {
+    transform: translateY(0);
+}
+
+.auth-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-top: 24px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color var(--transition-speed) ease;
+    padding: 8px;
+}
+
+.auth-toggle-btn:hover {
+    color: var(--text-primary);
+}
+
+
+/* Header & Footer */
 header, footer {
     padding: 24px 0;
     text-align: center;
@@ -58,7 +155,7 @@ footer {
     color: var(--text-secondary);
 }
 
-/*Links*/
+/* Links */
 a {
     color: var(--text-secondary);
     text-decoration: none;
@@ -68,7 +165,13 @@ a:hover {
     color: var(--text-primary);
 }
 
-/*Main Layout*/
+/* Main Layout */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
 main {
     flex-grow: 1;
     display: flex;
@@ -86,7 +189,7 @@ main {
     align-items: flex-start;
 }
 
-/*To-Do List*/
+/* To-Do List */
 .todo-container {
     width: 320px;
     background: var(--surface-color);
@@ -97,6 +200,7 @@ main {
     flex-direction: column;
     height: fit-content;
     max-height: 600px;
+    border: 1px solid var(--border-color);
 }
 .todo-header {
     text-align: center;
@@ -166,11 +270,12 @@ main {
     width: 100%;
     font-size: 0.95em;
     font-family: inherit;
-    transition: border-color var(--transition-speed) ease-in-out;
+    transition: all var(--transition-speed) ease-in-out;
     outline: none;
 }
 .todo-input:focus {
     border-color: var(--text-secondary);
+    box-shadow: 0 0 0 2px rgba(142, 142, 147, 0.2);
 }
 .todo-add-btn {
     background: var(--text-primary);
@@ -241,6 +346,7 @@ main {
     align-items: center;
     gap: 20px;
     min-width: 250px;
+    border: 1px solid var(--border-color);
 }
 .timer-display {
     font-size: 4em;
@@ -307,6 +413,7 @@ main {
     padding: 20px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-soft);
+    border: 1px solid var(--border-color);
 }
 
 .heatmap-container h4 {
@@ -344,6 +451,7 @@ main {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-soft);
     text-align: center;
+    border: 1px solid var(--border-color);
 }
 .random-quote {
     font-style: normal;
